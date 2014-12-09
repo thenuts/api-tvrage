@@ -20,6 +20,8 @@
 package com.omertron.tvrageapi.model;
 
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -75,7 +77,7 @@ public class EpisodeNumber implements Comparable<EpisodeNumber>, Serializable {
 
     private int calculateAbsolute(int season, int episode) {
         // Make the season very large for comparison purposes (will handle up to 1,000 episodes)
-        return ((season * FACTOR) + episode);
+        return (season * FACTOR) + episode;
     }
 
     @Override
@@ -137,48 +139,29 @@ public class EpisodeNumber implements Comparable<EpisodeNumber>, Serializable {
 
     public boolean isValid() {
         // False if either is 0
-        return (season * episode > 0);
+        return season * episode > 0;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + absolute;
-        result = prime * result + episode;
-        result = prime * result + season;
-        return result;
+        return new HashCodeBuilder()
+                .append(absolute)
+                .append(episode)
+                .append(season)
+                .toHashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (obj == null) {
+        if (obj instanceof EpisodeNumber) {
+            final EpisodeNumber other = (EpisodeNumber) obj;
+            return new EqualsBuilder()
+                    .append(absolute, other.absolute)
+                    .append(episode, other.episode)
+                    .append(season, other.season)
+                    .isEquals();
+        } else {
             return false;
         }
-
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        EpisodeNumber other = (EpisodeNumber) obj;
-
-        if (absolute == other.absolute) {
-            // If the absolute matches, then assume the season and episode will
-            return true;
-        }
-
-        if (season != other.season) {
-            return false;
-        }
-
-        if (episode != other.episode) {
-            return false;
-        }
-
-        return true;
     }
 }
