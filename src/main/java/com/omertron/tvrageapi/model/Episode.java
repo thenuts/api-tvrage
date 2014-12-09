@@ -94,7 +94,10 @@ public class Episode implements Serializable {
     }
 
     public Date getAirDate() {
-        return (Date) airDate.clone();
+    	if (airDate!=null)
+    		return (Date) airDate.clone();
+    	else 
+    		return null;
     }
 
     public void setAirDate(Date airDate) {
