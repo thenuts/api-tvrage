@@ -7,3 +7,6 @@
 
 /target/
 /nbactions.xml
+/.classpath
+/.project
+/.settings/
